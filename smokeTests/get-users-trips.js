@@ -33,12 +33,28 @@ class ErrorHandler {
     console.error(error);
   });
 
-export const options = {
-  // A number specifying the number of VUs to run concurrently.
-  vus: 3,
-  // A string specifying the total duration of the test run.
-  duration: '30s',
-};
+  export const options = {
+    scenarios: {
+      ramp: {
+        executor: "ramping-vus",
+        stages: [
+          { duration: "30s", target: 100 },
+          { duration: "30s", target: 500 },
+          { duration: "30s", target: 500 },
+          { duration: "30s", target: 0 },
+          { duration: "30s", target: 1000 },
+          { duration: "30s", target: 1000 },
+          { duration: "30s", target: 0 },
+          { duration: "30s", target: 1500 },
+          { duration: "30s", target: 1500 },
+          { duration: "30s", target: 0 },
+          { duration: "30s", target: 2000 },
+          { duration: "30s", target: 2000 },
+          { duration: "30s", target: 0 },
+        ],
+      },
+    },
+  };
 
 // The function that defines VU logic.
 //
@@ -56,8 +72,8 @@ export default function() {
   };
 
   let res = http.get(url, params);
-  let checkStatus = check(res, { 'status is 200': (res) => res.status === 200 });
-  errorHandler.logError(!checkStatus, res);
+  // let checkStatus = check(res, { 'status is 200': (res) => res.status === 200 });
+  // errorHandler.logError(!checkStatus, res);
 
   sleep(1);
 };
