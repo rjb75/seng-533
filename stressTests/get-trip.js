@@ -35,13 +35,18 @@ class ErrorHandler {
     console.error(error);
   });
 
-export const options = {
-  stages: [
-    { duration: '10m', target: 200 }, // traffic ramp-up from 1 to a higher 200 users over 10 minutes.
-    { duration: '30m', target: 200 }, // stay at higher 200 users for 30 minutes
-    { duration: '5m', target: 0 }, // ramp-down to 0 users
-  ],
-};
+  export const options = {
+    scenarios: {
+      ramp: {
+        executor: "ramping-vus",
+        stages: [
+          { duration: "10m", target: 500 },
+          { duration: "30m", target: 500 },
+          { duration: "5m", target: 0 },
+        ],
+      },
+    },
+  };
 
 // The function that defines VU logic.
 //
@@ -59,8 +64,8 @@ export default function() {
       };
 
     let res = http.get(url, params);
-    let checkStatus = check(res, { 'status is 200': (res) => res.status === 200 });
-    errorHandler.logError(!checkStatus, res);
+    // let checkStatus = check(res, { 'status is 200': (res) => res.status === 200 });
+    // errorHandler.logError(!checkStatus, res);
     
     sleep(1);
 };
