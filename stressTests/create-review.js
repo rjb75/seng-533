@@ -6,8 +6,9 @@ export const options = {
     ramp: {
       executor: "ramping-vus",
       stages: [
-        { duration: "2m", target: 2000 },
-        { duration: "1m", target: 0 },
+          { duration: "10m", target: 1000 },
+          { duration: "30m", target: 1000 },
+          { duration: "5m", target: 0 },
       ],
     },
   },
